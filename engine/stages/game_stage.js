@@ -120,7 +120,7 @@ function GameStage() {
                         } );
     
     
-    self.player2 = new Player( { pid : player2Name,
+    /*self.player2 = new Player( { pid : player2Name,
                           x : 600,
                           y : 400,
                           spriteURI : 'Assets/Images/player2_ship.png',
@@ -139,7 +139,7 @@ function GameStage() {
                               player.fireRechargeTime = player.fireRechargeTime - 1; // ** MAKE THIS TIME-BASED (on deltaTime)!!! **
                             }
                           }
-                        } );
+                        } );*/
                         
     // Setup new projectile types
     self.projectileTypes['player1_bullet'] =  new ProjectileType( { spriteURI : 'Assets/Images/projectile01.png',
@@ -149,15 +149,16 @@ function GameStage() {
                                                                rechargeTime : 10,
                                                                collisionGroup : -1} );
     
-    self.projectileTypes['player2_bullet'] = new ProjectileType( { spriteURI : 'Assets/Images/projectile02.png',
+    /*self.projectileTypes['player2_bullet'] = new ProjectileType( { spriteURI : 'Assets/Images/projectile02.png',
                                                               strength : 10,
                                                               mass : 4,
                                                               range : bullet_lifespan,
                                                               rechargeTime : 10,
-                                                              collisionGroup : -2} );
+                                                              collisionGroup : -2} );*/
     
     
     // Pickups
+	
     self.pickupTypes['energy_pickup'] = new PickupType(  { spriteURI : 'Assets/Images/pickup_energy.png',
                                                       collisionGroup : 0,
                                                       handler : function(collector) {
@@ -180,7 +181,7 @@ function GameStage() {
                                                      
                                                        collector.increaseFireRate(0.5);
                                                       }
-                                                    } );                                                
+                                                    } );												
     
     self.pickup_timer = pickup_time_delay;
     
@@ -326,10 +327,10 @@ function GameStage() {
       
       self.gameWinner = self.player2;
     }
-    else if (self.player2.strength==0) {
+    /*else if (self.player2.strength==0) {
       
       self.gameWinner = self.player1;
-    }
+    }*/
     
     
     // Repeat gameloop, or start phase-out if end of game condition(s) met

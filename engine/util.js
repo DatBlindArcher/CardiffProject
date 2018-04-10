@@ -78,6 +78,7 @@ function enterFullscreen(element) {
 
 function drawHUD(context, player1, player2) {
 
+	return;
   // Draw HUD
   context.fillStyle = '#FFFFFF';
   //context.font = '30pt Amatic SC';
