@@ -26,5 +26,5 @@ const integrator_step = 1.0; // depricated
 
 const frictionCoeff = 0.025; // depricated
  
-const player1Name = "Player 1";
+const player1Name = "Contestant 1";
 const player2Name = "Player 2";
