@@ -47,10 +47,9 @@ function GameStage() {
   this.drawScene = function() {
 
     // Draw background        
-    if (self.backgroundImage) {
-  
-      self.backgroundImage.draw(system.canvas);
-    }
+    if (self.background) {	      
+		self.background.draw(system.canvas);				
+	}
   
     // Draw player1
     if (self.player1) {
@@ -96,7 +95,7 @@ function GameStage() {
   this.init = function(obj) {
   
     // Load background
-    self.backgroundImage = new Background('Assets/Images/Galaxy-background.jpg');
+    self.background = new Background('black');
     
     // Setup players
     self.player1 = new Player( { pid : player1Name,
