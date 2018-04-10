@@ -37,6 +37,7 @@ function GameStage() {
   this.characterTypes = []; // Character TYPES / MODELS
   this.characters = []; // Character INSTANCES        
         
+	
   this.showStats = true;
   
   // End of game state
@@ -69,6 +70,7 @@ function GameStage() {
     drawObjects(system.context, self.projectileArray);
     drawObjects(system.context, self.pickupArray);
     drawObjects(system.context, self.characters);
+
     
     
     // Draw Heads-Up-Display showing scores etc.

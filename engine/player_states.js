@@ -18,6 +18,8 @@ function updatePlayer1(player, deltaTime, env) {
 		// timer = Random.Range();
 	}
 	
+	tail.draw(system.context, player.mBody.position.x, player.mBody.position.y);
+	
 	var F = player.forwardDirection();
 	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
 	

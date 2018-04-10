@@ -9,6 +9,8 @@ function include(url) {
   sc.src = url;
   document.head.appendChild(sc);
 }
+// self added
+include('engine/tail.js');
 
 include('engine/matter_js/matter.js');
 include('engine/gl-matrix/gl-matrix-min.js');
@@ -27,3 +29,4 @@ include('config.js');
 include('engine/stages/game_stage.js');
 include('engine/characters/character_ufo.js');
 include('engine/CollisionModel.js');
+
