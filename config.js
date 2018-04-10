@@ -28,3 +28,5 @@ const frictionCoeff = 0.025; // depricated
  
 const player1Name = "Contestant 1";
 const player2Name = "Player 2";
+
+const trail_width = 4;

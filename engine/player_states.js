@@ -2,14 +2,26 @@
 //
 // Player control functions / states
 //
-var timer = 0;
+var timer = 1;
 var lastpos = null;
 
 function updatePlayer1(player, deltaTime, env) {
   
+	var F = player.forwardDirection();
+		
 	if (timer > 0)
 	{
-		timer -= deltaTime;
+		//timer -= deltaTime;
+		if (player.trail) {    
+		  // Add vertices to physics body
+		  player.trail.vertices.push({x: player.mBody.position.x + trail_width / 2, y: player.mBody.position.y});
+		  player.trail.vertices.push({x: player.mBody.position.x - trail_width / 2, y: player.mBody.position.y});
+		  player.trail.vertices.push({x: player.mBody.position.x - trail_width / 2, y: player.mBody.position.y + trail_width / 2});
+		  Matter.Body.setVertices(player.trail.mBody, player.trail.vertices);
+	  
+		  // Add a position to trail
+		  player.trail.positions.push({x: player.mBody.position.x, y: player.mBody.position.y});
+		}
 	}
 	
 	else
@@ -17,10 +29,7 @@ function updatePlayer1(player, deltaTime, env) {
 		// leave gap
 		// timer = Random.Range();
 	}
-	
-	tail.draw(system.context, player.mBody.position.x, player.mBody.position.y);
-	
-	var F = player.forwardDirection();
+		
 	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
 	
   if (system.keyPressed('A')) {

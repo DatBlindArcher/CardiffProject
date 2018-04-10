@@ -29,6 +29,8 @@ function GameStage() {
   
   this.projectileTypes = []; // Projectile TYPES
   this.projectileArray = []; // Projectile INSTANCES
+  
+  this.trailArray = []; // Trail INSTANCES
 
   this.pickupTypes = []; // Pickup TYPES
   this.pickupArray = []; // Pickup INSTANCES
@@ -67,7 +69,8 @@ function GameStage() {
     }*/
   
     // Draw projectiles and pickups
-    drawObjects(system.context, self.projectileArray);
+    drawObjects(system.context, self.trailArray);
+	drawObjects(system.context, self.projectileArray);
     drawObjects(system.context, self.pickupArray);
     drawObjects(system.context, self.characters);
 
@@ -142,7 +145,7 @@ function GameStage() {
                             }
                           }
                         } );*/
-                        
+						
     // Setup new projectile types
     self.projectileTypes['player1_bullet'] =  new ProjectileType( { spriteURI : 'Assets/Images/projectile01.png',
                                                                strength : 10,
@@ -237,7 +240,7 @@ function GameStage() {
         if (pairs[i].bodyA.hostObject !== undefined &&
             pairs[i].bodyB.hostObject !== undefined) {
         
-          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
         }
         
       }
@@ -254,7 +257,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.preUpdate !== undefined) {
           
-          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
         }
       };
     });
@@ -270,7 +273,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.postUpdate !== undefined) {
         
-          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
         }
       };
     });                    

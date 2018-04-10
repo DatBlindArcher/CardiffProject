@@ -49,6 +49,7 @@ function Player(config) {
       
       self.preUpdate = config.preUpdate;
       self.postUpdate = config.postUpdate;
+	  
     }
   );
   
@@ -75,6 +76,14 @@ function Player(config) {
       this.sprite.draw(context, 0, 0, this.scale);
       
       context.restore();
+	  
+	  if (!this.trail)
+	  {  
+		this.trail = new Trail({ position : { x: pos.x, y: pos.y }, owner : this, color : 'red' });
+		World.add(config.world, [this.trail.mBody]);
+	  }
+	  
+	  this.trail.draw(context);
     }
     
   }
@@ -82,7 +91,7 @@ function Player(config) {
   // Draw player bounding volume (Geometry of Matter.Body mBody)
   this.drawBoundingVolume = function(context, bbColour) {
     
-    return;
+    //return;
     
     if (this.mBody) {
       
@@ -228,6 +237,11 @@ function Player(config) {
   this.collideWithPlayer = function(otherPlayer, env) {
     
     console.log('Oi, knock it off!');
+  }
+  
+  this.collideWithTrail = function(trail, env) {
+    
+    console.log('Touched a trail!');
   }
   
   this.collideWithProjectile = function(projectile, env) {
