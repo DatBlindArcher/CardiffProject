@@ -1,8 +1,8 @@
 // Config code
 
-const player_rotate_speed = 0.04; // Bigger number = faster!
+const player_rotate_speed = 0.015; // Bigger number = faster!
 
-const player_move_speed = 4; // Bigger number = faster!
+const player_move_speed = 2; // Bigger number = faster!
 
 const projectile_speed = 0.1; // Bigger number = faster!
 

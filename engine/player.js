@@ -160,7 +160,12 @@ function Player(config) {
   this.applyForce = function(pos, direction) {
     
     Body.applyForce(this.mBody, pos, direction);
-  }      
+  }   
+  
+  this.translate = function(direction) {
+	
+    Body.translate(this.mBody, direction);
+  }     
   
   
   // Apply force at pos p on body 'this'

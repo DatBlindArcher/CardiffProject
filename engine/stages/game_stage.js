@@ -25,7 +25,7 @@ function GameStage() {
   this.background = null;
   
   this.player1 = null;
-  this.player2 = null;
+  //this.player2 = null;
   
   this.projectileTypes = []; // Projectile TYPES
   this.projectileArray = []; // Projectile INSTANCES
@@ -60,11 +60,11 @@ function GameStage() {
     }
   
     // Draw player2
-    if (self.player2) {
+    /*if (self.player2) {
   
       self.player2.draw(system.context);
       self.player2.drawBoundingVolume(system.context, '#FFFFFF');
-    }
+    }*/
   
     // Draw projectiles and pickups
     drawObjects(system.context, self.projectileArray);
@@ -77,10 +77,10 @@ function GameStage() {
   
     if (self.showStats) {
     
-      document.getElementById("actualTime").innerHTML = "Seconds elapsed = " + system.gameClock.actualTimeElapsed().toFixed();
-      document.getElementById("timeDelta").innerHTML = "Time Delta = " + Math.round(system.gameClock.deltaTime).toFixed();
+      document.getElementById("actualTime").innerHTML = "Seconds elapsed = " + system.gameClock.actualTimeElapsed().toFixed(2) + " s";
+      document.getElementById("timeDelta").innerHTML = "Time Delta = " + Math.round(system.gameClock.deltaTime).toFixed() + " ms";
       document.getElementById("fps").innerHTML = "FPS = " + system.gameClock.frameCounter.getAverageFPS().toFixed();
-      document.getElementById("spf").innerHTML = "SPF = " + system.gameClock.frameCounter.getAverageSPF().toFixed();
+      document.getElementById("spf").innerHTML = "SPF = " + (system.gameClock.frameCounter.getAverageSPF() * 1000.0).toFixed() + " ms";
     }
   }
 
@@ -187,23 +187,23 @@ function GameStage() {
     
     
     // In-game characters        
-    self.characterTypes['ufo'] = (new UFOCharacter());
+    /*self.characterTypes['ufo'] = (new UFOCharacter());
         
     
     var newCharacter = self.characterTypes['ufo'].create( { pos : { x : 400, y : 300 } } );
     
     self.characters.push(newCharacter);
-    Matter.World.add(system.engine.world, [newCharacter.mBody]);
+    Matter.World.add(system.engine.world, [newCharacter.mBody]);*/
     
     
     // Setup gravity configuration for this stage
     system.engine.world.gravity.y = 0;
     
     // Add bounds so you cannot go off the screen
-    var b0 = Matter.Bodies.rectangle(-50, 300, 100, 600, { isStatic: true });
-    var b1 = Matter.Bodies.rectangle(850, 300, 100, 600, { isStatic: true });
-    var b2 = Matter.Bodies.rectangle(400, -50, 800, 100, { isStatic: true });
-    var b3 = Matter.Bodies.rectangle(400, 650, 800, 100, { isStatic: true });
+    var b0 = Matter.Bodies.rectangle(-50, 300, 100, canvas.height, { isStatic: true });
+    var b1 = Matter.Bodies.rectangle(850, 300, 100, canvas.height, { isStatic: true });
+    var b2 = Matter.Bodies.rectangle(400, -50, canvas.width, 100, { isStatic: true });
+    var b3 = Matter.Bodies.rectangle(400, 650, canvas.width, 100, { isStatic: true });
     
     b0.collisionFilter.group = 0;
     b0.collisionFilter.category = CollisionModel.StaticScene.Category;

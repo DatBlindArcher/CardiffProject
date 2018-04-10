@@ -6,20 +6,9 @@
 
 function updatePlayer1(player, deltaTime, env) {
   
-  if (system.keyPressed('W')) {
-    
-    var F = player.forwardDirection();
-    
-    player.applyForce(player.mBody.position, { x : F.x * 0.01, y : F.y * 0.01 });
-  }
-  
-  if (system.keyPressed('S')) {
-    
-    var F = player.forwardDirection();
-    
-    player.applyForce(player.mBody.position, { x : -F.x * 0.01, y : -F.y * 0.01 });
-  }
-  
+	var F = player.forwardDirection();
+	player.translate({ x : F.x * player_move_speed, y : F.y * player_move_speed });
+	
   if (system.keyPressed('A')) {
     
     Matter.Body.setAngularVelocity(player.mBody, 0);
