@@ -2,23 +2,35 @@
 //
 // Player control functions / states
 //
-
+var timer = 0;
+var lastpos = null;
 
 function updatePlayer1(player, deltaTime, env) {
   
+	if (timer > 0)
+	{
+		timer -= deltaTime;
+	}
+	
+	else
+	{
+		// leave gap
+		// timer = Random.Range();
+	}
+	
 	var F = player.forwardDirection();
-	player.translate({ x : F.x * player_move_speed, y : F.y * player_move_speed });
+	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
 	
   if (system.keyPressed('A')) {
     
     Matter.Body.setAngularVelocity(player.mBody, 0);
-    player.rotate(-Math.PI * player_rotate_speed);
+    player.rotate(-Math.PI * player_rotate_speed * deltaTime);
   }
   
   if (system.keyPressed('D')) {
     
     Matter.Body.setAngularVelocity(player.mBody, 0);
-    player.rotate(Math.PI * player_rotate_speed);
+    player.rotate(Math.PI * player_rotate_speed * deltaTime);
   }
   
   
