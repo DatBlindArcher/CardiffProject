@@ -24,21 +24,11 @@ function GameStage() {
   // Main game-state specific variables
   this.background = null;
   
-  this.player1 = null;
-  //this.player2 = null;
+  this.players = [];
   
-  this.projectileTypes = []; // Projectile TYPES
-  this.projectileArray = []; // Projectile INSTANCES
-  
-  this.trailArray = []; // Trail INSTANCES
-
   this.pickupTypes = []; // Pickup TYPES
   this.pickupArray = []; // Pickup INSTANCES
-  this.pickup_timer = 0; // Number of seconds between pickups appearing
-  
-  this.characterTypes = []; // Character TYPES / MODELS
-  this.characters = []; // Character INSTANCES        
-        
+  this.pickup_timer = 0; // Number of seconds between pickups appearing        
 	
   this.showStats = true;
   
@@ -54,33 +44,14 @@ function GameStage() {
 		self.background.draw(system.canvas);				
 	}
   
-    // Draw player1
-    if (self.player1) {
-    
-      self.player1.draw(system.context);
-      self.player1.drawBoundingVolume(system.context, '#FFFFFF');
-    }
-  
-    // Draw player2
-    /*if (self.player2) {
-  
-      self.player2.draw(system.context);
-      self.player2.drawBoundingVolume(system.context, '#FFFFFF');
-    }*/
-  
-    // Draw projectiles and pickups
-    drawObjects(system.context, self.trailArray);
-	drawObjects(system.context, self.projectileArray);
+    // Draw
+	drawObjects(system.context, self.players);
     drawObjects(system.context, self.pickupArray);
-    drawObjects(system.context, self.characters);
 
-    
-    
-    // Draw Heads-Up-Display showing scores etc.
-    drawHUD(system.context, self.player1, self.player2);
+    // Draw UI
+    drawHUD(system.context, self.players);
   
     if (self.showStats) {
-    
       document.getElementById("actualTime").innerHTML = "Seconds elapsed = " + system.gameClock.actualTimeElapsed().toFixed(2) + " s";
       document.getElementById("timeDelta").innerHTML = "Time Delta = " + Math.round(system.gameClock.deltaTime).toFixed() + " ms";
       document.getElementById("fps").innerHTML = "FPS = " + system.gameClock.frameCounter.getAverageFPS().toFixed();
@@ -103,7 +74,7 @@ function GameStage() {
     self.background = new Background('black');
     
     // Setup players
-    self.player1 = new Player( { pid : player1Name,
+    self.players.push(new Player( { pid : "Player 1",
                           x : 200,
                           y : 400,
                           spriteURI : 'Assets/Images/player1_ship.png',
@@ -113,93 +84,21 @@ function GameStage() {
                           collisionGroup : -1,
                           preUpdate : function(player, deltaTime, env) {
                           
-                            updatePlayer1(player, deltaTime, env);
+                            updatePlayer(player, deltaTime, env);
                           },
-                          postUpdate : function(player, deltaTime, env) {
-                          
-                            if (player.fireRechargeTime > 0) {
-                            
-                              player.fireRechargeTime = player.fireRechargeTime - 1; // ** MAKE THIS TIME-BASED (on deltaTime)!!! **
-                            }
-                          }
-                        } );
-    
-    
-    /*self.player2 = new Player( { pid : player2Name,
-                          x : 600,
-                          y : 400,
-                          spriteURI : 'Assets/Images/player2_ship.png',
-                          world : system.engine.world,
-                          mass : 20,
-                          boundingVolumeScale : 0.75,
-                          collisionGroup : -2,
-                          preUpdate : function(player, deltaTime, env) {
-                          
-                            updatePlayer2(player, deltaTime, env);
-                          },
-                          postUpdate : function(player, deltaTime, env) {
-                          
-                            if (player.fireRechargeTime > 0) {
-                            
-                              player.fireRechargeTime = player.fireRechargeTime - 1; // ** MAKE THIS TIME-BASED (on deltaTime)!!! **
-                            }
-                          }
-                        } );*/
+                          postUpdate : function() {}
+                          }));
 						
-    // Setup new projectile types
-    self.projectileTypes['player1_bullet'] =  new ProjectileType( { spriteURI : 'Assets/Images/projectile01.png',
-                                                               strength : 10,
-                                                               mass : 4,
-                                                               range : bullet_lifespan,
-                                                               rechargeTime : 10,
-                                                               collisionGroup : -1} );
-    
-    /*self.projectileTypes['player2_bullet'] = new ProjectileType( { spriteURI : 'Assets/Images/projectile02.png',
-                                                              strength : 10,
-                                                              mass : 4,
-                                                              range : bullet_lifespan,
-                                                              rechargeTime : 10,
-                                                              collisionGroup : -2} );*/
-    
-    
     // Pickups
-	
-    self.pickupTypes['energy_pickup'] = new PickupType(  { spriteURI : 'Assets/Images/pickup_energy.png',
-                                                      collisionGroup : 0,
-                                                      handler : function(collector) {
-                                                     
-                                                       collector.addStrength(20);
-                                                      }
-                                                    } );
-                                                     
     self.pickupTypes['points_pickup'] = new PickupType(  { spriteURI : 'Assets/Images/pickup_points.png',
                                                       collisionGroup : 0,
                                                       handler : function(collector) {
                                                      
                                                        collector.addPoints(50);
                                                       }
-                                                    } );
-                                                    
-    self.pickupTypes['bullet_pickup'] = new PickupType(  { spriteURI : 'Assets/Images/pickup_bullets.png',
-                                                      collisionGroup : 0,
-                                                      handler : function(collector) {
-                                                     
-                                                       collector.increaseFireRate(0.5);
-                                                      }
-                                                    } );												
+                                                    } );											
     
     self.pickup_timer = pickup_time_delay;
-    
-    
-    // In-game characters        
-    /*self.characterTypes['ufo'] = (new UFOCharacter());
-        
-    
-    var newCharacter = self.characterTypes['ufo'].create( { pos : { x : 400, y : 300 } } );
-    
-    self.characters.push(newCharacter);
-    Matter.World.add(system.engine.world, [newCharacter.mBody]);*/
-    
     
     // Setup gravity configuration for this stage
     system.engine.world.gravity.y = 0;
@@ -240,7 +139,7 @@ function GameStage() {
         if (pairs[i].bodyA.hostObject !== undefined &&
             pairs[i].bodyB.hostObject !== undefined) {
         
-          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
         
       }
@@ -257,7 +156,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.preUpdate !== undefined) {
           
-          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });
@@ -273,7 +172,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.postUpdate !== undefined) {
         
-          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { trailArray : self.trailArray, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray, projectileTypes : self.projectileTypes, projectileArray : self.projectileArray } );
+          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });                    
@@ -328,15 +227,7 @@ function GameStage() {
     self.drawScene();
     
     // Check for end-of-game state
-    if (self.player1.strength==0) {
-      
-      self.gameWinner = self.player2;
-    }
-    /*else if (self.player2.strength==0) {
-      
-      self.gameWinner = self.player1;
-    }*/
-    
+    // TODO
     
     // Repeat gameloop, or start phase-out if end of game condition(s) met
     if (self.gameWinner==null) {
