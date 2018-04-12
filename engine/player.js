@@ -15,7 +15,10 @@ function Player(config) {
   
   var self = this;
   
-  this.strength = 100;
+	this.leftKey = config.leftKey;
+	this.rightKey = config.rightKey;
+
+	this.dead = false;
   this.score = 0;
   this.scale = player_sprite_scale;
   this.mBody = null;
@@ -49,6 +52,7 @@ function Player(config) {
       
       self.preUpdate = config.preUpdate;
       self.postUpdate = config.postUpdate;
+	  
     }
   );
   
@@ -60,7 +64,7 @@ function Player(config) {
   // Rendering interface
   //
   
-  this.draw = function(context) {
+  this.draw = function(context, gamestate) {
   
     if (this.mBody) {
       
@@ -68,21 +72,30 @@ function Player(config) {
       
       var pos = this.mBody.position;
       var theta = this.mBody.angle;
+	  
+	  if (!this.trail)
+	  {  
+		this.trail = new Trail({ position : { x: pos.x, y: pos.y }, owner : this, color : 'red' });
+	  }
+	  
+	  this.trail.draw(context);
       
-      context.translate(pos.x, pos.y);
-      context.rotate(theta);
-      context.translate(-this.sprite.image.width * this.scale / 2, -this.sprite.image.height * this.scale / 2);
-      this.sprite.draw(context, 0, 0, this.scale);
+	  if (!this.dead)
+	  {
+		  context.translate(pos.x, pos.y);
+		  context.rotate(theta);
+		  context.translate(-this.sprite.image.width * this.scale / 2 * gamestate.size, -this.sprite.image.height * this.scale * gamestate.size / 2);
+		  this.sprite.draw(context, 0, 0, this.scale * gamestate.size);
+	  }
       
       context.restore();
     }
-    
   }
   
   // Draw player bounding volume (Geometry of Matter.Body mBody)
-  this.drawBoundingVolume = function(context, bbColour) {
+  this.drawBoundingVolume = function(context) {
     
-    return;
+    //return;
     
     if (this.mBody) {
       
@@ -105,7 +118,7 @@ function Player(config) {
     
       context.lineWidth = 2;
           
-      context.strokeStyle = '#FF0000';
+      context.strokeStyle = '#FFFF00';
       context.beginPath();
       context.moveTo(pos.x, pos.y);
       context.lineTo(pos.x + bx.x * w, pos.y + bx.y * w);
@@ -135,7 +148,7 @@ function Player(config) {
           
       // Render geometry
       context.lineWidth = 1;
-      context.strokeStyle = bbColour;
+      context.strokeStyle = "white";
       context.stroke();
     }
   }
@@ -193,27 +206,9 @@ function Player(config) {
     Body.rotate(this.mBody, dTheta);
   }
   
-  
-  this.addStrength = function(energyDelta) {
-    
-    this.strength = Math.max(0, Math.min(100, this.strength + energyDelta));
-  }
-  
-  
   this.addPoints = function(scoreDelta) {
     
     this.score = Math.max(0, this.score + scoreDelta);
-  }
-  
-  
-  this.updateStrength = function(strengthDelta) {
-  
-    this.strength = this.strength + strengthDelta;
-  }
-  
-  this.increaseFireRate = function(fireRateScale) {
-    
-    this.rechargeRate = this.rechargeRate * fireRateScale;
   }
   
   //
@@ -230,13 +225,8 @@ function Player(config) {
     console.log('Oi, knock it off!');
   }
   
-  this.collideWithProjectile = function(projectile, env) {
-        
-    projectile.owner.score += points_on_hit;          
-    this.updateStrength(-projectile.type.strength);
-    
-    World.remove(system.engine.world, projectile.mBody);
-    env.projectileArray.splice(env.projectileArray.indexOf(projectile), 1);
+  this.collideWithTrail = function(trail, env) {
+	  this.dead = true;
   }
   
   this.collideWithPickup = function(pickup, env) {

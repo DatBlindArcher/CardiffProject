@@ -10,7 +10,7 @@ const fps = 60; // depricated
 
 const points_on_hit = 100;
 
-const player_sprite_scale = 2.5; // Bigger number = larger sprite!
+const player_sprite_scale = 0.5; // Bigger number = larger sprite!
 
 const pickup_sprite_scale = 1.75; // Bigger number = larger sprite!
 
@@ -25,6 +25,7 @@ const bullet_lifespan = 200; // Bigger number = longer range
 const integrator_step = 1.0; // depricated
 
 const frictionCoeff = 0.025; // depricated
- 
-const player1Name = "Contestant 1";
-const player2Name = "Player 2";
+
+const trail_width = 2; // Width of the default trail
+
+const trail_tail = 10; // The amount of frames the tail of the trail is ignored for the owner of the trail

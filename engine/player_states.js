@@ -1,149 +1,61 @@
 
-//
 // Player control functions / states
-//
-var timer = 0;
-var lastpos = null;
-
-function updatePlayer1(player, deltaTime, env) {
-  
-	if (timer > 0)
-	{
-		timer -= deltaTime;
-	}
-	
-	else
-	{
-		// leave gap
-		// timer = Random.Range();
-	}
-	
-	tail.draw(system.context, player.mBody.position.x, player.mBody.position.y);
+function updatePlayer(player, deltaTime, env) {
+	if (!env.gamestate.started || player.dead) return;
 	
 	var F = player.forwardDirection();
-	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
 	
-  if (system.keyPressed('A')) {
-    
-    Matter.Body.setAngularVelocity(player.mBody, 0);
+	if (player.trail)
+	{
+		// Trail collisions
+		for (var i = 0; i < env.players.length; i++)
+		{
+			var trail = env.players[i].trail;
+			
+			if (isPlayerOnTrail(player, trail, deltaTime, env))
+			{
+				console.log("We touched something: ", trail.color);
+				player.collideWithTrail(trail, env);
+			}
+		}
+		
+		player.trail.positions.push({ x: player.mBody.position.x, y: player.mBody.position.y, size: trail_width * env.gamestate.size });
+	}
+		
+	player.translate({ x : F.x * player_move_speed * env.gamestate.speed * deltaTime, y : F.y * player_move_speed * env.gamestate.speed * deltaTime });
+	
+  if (system.keyPressed(player.leftKey)) 
+  { 
     player.rotate(-Math.PI * player_rotate_speed * deltaTime);
   }
   
-  if (system.keyPressed('D')) {
-    
-    Matter.Body.setAngularVelocity(player.mBody, 0);
+  if (system.keyPressed(player.rightKey)) 
+  {  
     player.rotate(Math.PI * player_rotate_speed * deltaTime);
   }
-  
-  
-  // Only allow fire when recharge counter = 0
-  
-  if (system.keyPressed('SPACE') && player.fireRechargeTime<=0) {
-  
-    // Create new bullet
-    var playerDirection = player.forwardDirection();
-    
-    var newBullet = new Bullet( { pos :  player.mBody.position,
-                                  direction : { x : playerDirection.x * projectile_speed, y : playerDirection.y * projectile_speed},
-                                  type : env.projectileTypes['player1_bullet'],
-                                  owner : player,
-                                  postUpdate : function(bullet, deltaTime, env) {
-                      
-                                                if (bullet.range > 0) {
-                                                
-                                                  bullet.range = bullet.range - 1;
-                                                  
-                                                  if (bullet.range==0) {
-                                                    
-                                                    // Delete bullet instance                  
-                                                    Matter.World.remove(system.engine.world, bullet.mBody);
-                                                    env.projectileArray.splice(env.projectileArray.indexOf(bullet), 1);
-                                                  }
-                                                }
-                                              } 
-                                });
-    
-    if (newBullet) {
-    
-      // Add new bullet to matter.js physics system
-      Matter.World.add(system.engine.world, [newBullet.mBody]);
-  
-      // Add new bullet to the main app bullet model
-      env.projectileArray.push(newBullet);
-    }
-    
-    player.fireRechargeTime = env.projectileTypes['player1_bullet'].rechargeTime * player.rechargeRate;
-    
-  }
-  
 }
 
-
-function updatePlayer2(player, deltaTime, env) {
-  
-  if (system.keyPressed('P')) {
-    
-    var F = player.forwardDirection();
-    
-    player.applyForce(player.mBody.position, { x : F.x * 0.01, y : F.y * 0.01 });
-  }
-  
-  if (system.keyPressed('L')) {
-    
-    var F = player.forwardDirection();
-    
-    player.applyForce(player.mBody.position, { x : -F.x * 0.01, y : -F.y * 0.01 });
-  }
-  
-  if (system.keyPressed('N')) {
-    
-    Matter.Body.setAngularVelocity(player.mBody, 0);
-    player.rotate(-Math.PI * player_rotate_speed);
-  }
-  
-  if (system.keyPressed('M')) {
-    
-    Matter.Body.setAngularVelocity(player.mBody, 0);
-    player.rotate(Math.PI * player_rotate_speed);
-  }
-  
-  
-  // Only allow fire when recharge counter = 0
-  if (system.keyPressed('RETURN') && player.fireRechargeTime<=0) {
-  
-    // Create new bullet
-    var playerDirection = player.forwardDirection();
-    
-    var newBullet = new Bullet( { pos :  player.mBody.position,
-                                  direction : { x : playerDirection.x * projectile_speed, y : playerDirection.y * projectile_speed},
-                                  type : env.projectileTypes['player2_bullet'],
-                                  owner : player,
-                                  postUpdate : function(bullet, deltaTime, env) {
-                      
-                                                if (bullet.range > 0) {
-                                                
-                                                  bullet.range = bullet.range - 1;
-                                                  
-                                                  if (bullet.range==0) {
-                                                    
-                                                    // Delete bullet instance                  
-                                                    Matter.World.remove(system.engine.world, bullet.mBody);
-                                                    env.projectileArray.splice(env.projectileArray.indexOf(bullet), 1);
-                                                  }
-                                                }
-                                              } 
-                                } );
-    
-    if (newBullet) {
-    
-      // Add new bullet to matter.js physics system
-      Matter.World.add(system.engine.world, [newBullet.mBody]);
-  
-      // Add new bullet to the main app bullet model
-      env.projectileArray.push(newBullet);
-    }
-    
-    player.fireRechargeTime = env.projectileTypes['player2_bullet'].rechargeTime * player.rechargeRate;
-  }
-  
+function isPlayerOnTrail(player, trail, deltaTime, env) {
+	var center = player.mBody.position;
+	var radius = (player.size.width * env.gamestate.size / 1.5);
+	radius *= radius;
+	var points = trail.positions;
+	if (points.length == 0) return false;
+	
+	for (var i = 0; i < points.length; i++)
+	{
+		if (player.trail == trail)
+			if (points.length - i < env.gamestate.size / 2 * trail_tail / env.gamestate.speed) 
+				break;
+		
+		var dx = center.x - points[i].x;
+		var dy = center.y - points[i].y;
+		
+		if (dx * dx + dy * dy - points[i].size * trail_width <= radius)
+		{
+			return true;  
+		}
+	}
+	
+	return false;
 }
