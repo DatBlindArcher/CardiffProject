@@ -21,6 +21,9 @@ function updatePlayer(player, deltaTime, env) {
 		
 		player.trail.positions.push({ x: player.mBody.position.x, y: player.mBody.position.y, size: trail_width * env.gamestate.size });
 	}
+	
+	if (player.mBody.position.x <= 0 || player.mBody.position.y <= 0 || player.mBody.position.x >= 800 || player.mBody.position.y >= 600) 
+			player.collideWithTrail(player.trail, env);
 		
 	player.translate({ x : F.x * player_move_speed * env.gamestate.speed * deltaTime, y : F.y * player_move_speed * env.gamestate.speed * deltaTime });
 	

@@ -14,13 +14,12 @@ $(document).ready(function() {
 });
 
 var counter = 0;
-var colors = ["004DFF", "FF00AC", "56FF38", "FF1700", "FFFF00", "FFF"];
 var controls = [["Q", "W"], ["D", "F"], ["T", "Y"], ["J", "K"], ["O", "P"], ["X", "C"], ]
 var playerArray = []; //
 
 var addPlayer = function () {
     if ( counter < 6) {
-        $("#players").append("<div class='player' style='border: 2px solid #" + colors[counter] + "'><h2>Player " + (counter + 1) + "</h2><div class='keys'><input type='text' maxlength='1' value='" + controls[counter][0] + "' class='keyLeft'><input type='text' maxlength='1' class='keyRight' value='" + controls[counter][1] + "'></div></div>");
+        $("#players").append("<div class='player' style='border: 2px solid " + colors[counter] + "'><h2>Player " + (counter + 1) + "</h2><div class='keys'><input type='text' maxlength='1' value='" + controls[counter][0] + "' class='keyLeft'><input type='text' maxlength='1' class='keyRight' value='" + controls[counter][1] + "'></div></div>");
         counter++;
     }
 };
@@ -42,6 +41,8 @@ var startGame = function() {
             right: $(this).find(".keyRight").val()
         });
     });
+		
+	init();
 };
 
 var backToStart = function() {

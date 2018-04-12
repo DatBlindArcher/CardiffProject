@@ -75,13 +75,37 @@ function GameStage() {
   // the stage model is based on the idea that the host browser calls each stage function directly.  This is not necessary however - if we called
   // stages directly, when each function exists, we'd unravel the stack call hierarchy anyway and a subsequent frame callback will be
   // directly to the correct stage function.
+  
   this.init = function(obj) {
   
     // Load background
     self.background = new Background('black');
     
     // Setup players
-    self.players.push(new Player( { pid : "Player 1",
+	for (var i = 0; i < playerArray.length; i++)
+	{
+		var playerinfo = playerArray[i];
+		
+		self.players.push(new Player( { pid : "Player " + (i + 1),
+                          x : spawns[i].x,
+                          y : spawns[i].y,
+                          spriteURI : 'Assets/Images/Avatars/avatar' + (i + 2) + '.png',
+                          world : system.engine.world,
+                          mass : 20,
+                          boundingVolumeScale : 0.75,
+                          collisionGroup : -1,
+						  leftKey : playerinfo.left,
+						  rightKey : playerinfo.right,
+						  color : colors[i],
+                          preUpdate : function(player, deltaTime, env) {
+                          
+                            updatePlayer(player, deltaTime, env);
+                          },
+                          postUpdate : function() {}
+                          }));
+	}
+	
+    /*self.players.push(new Player( { pid : "Player 1",
                           x : 200,
                           y : 400,
                           spriteURI : 'Assets/Images/Avatars/avatar2.png',
@@ -115,7 +139,7 @@ function GameStage() {
                             updatePlayer(player, deltaTime, env);
                           },
                           postUpdate : function() {}
-                          }));
+                          }));*/
 						
     // Powerups
     self.powerupTypes['fast'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/fast.png',

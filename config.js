@@ -28,4 +28,8 @@ const frictionCoeff = 0.025; // depricated
 
 const trail_width = 2; // Width of the default trail
 
-const trail_tail = 10; // The amount of frames the tail of the trail is ignored for the owner of the trail
+const trail_tail = 10; // The amount of frames the tail of the trail is ignored for the owner of the 
+
+const colors = ["#004DFF", "#FF00AC", "#56FF38", "#FF1700", "#FFFF00", "#FFFFFF"];
+
+const spawns = [{ x: 200, y: 200 }, { x: 400, y: 200 }, { x: 200, y: 400 }, { x: 400, y: 400 }, { x: 600, y: 200 }, { x: 300, y: 300 }];
