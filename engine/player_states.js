@@ -1,7 +1,7 @@
 
 // Player control functions / states
 function updatePlayer(player, deltaTime, env) {
-	if (player.dead) return;
+	if (!env.started || player.dead) return;
 	
 	var F = player.forwardDirection();
 	

@@ -24,6 +24,8 @@ function GameStage() {
   // Main game-state specific variables
   this.background = null;
   
+  this.started = false;
+  this.startTimer = 5;
   this.players = [];
   
   this.pickupTypes = []; // Pickup TYPES
@@ -38,18 +40,23 @@ function GameStage() {
   
   // "Internal" state functions
   this.drawScene = function() {
-
-    // Draw background        
-    if (self.background) {	      
-		self.background.draw(system.canvas);				
+	
+	if (self.started)
+	{
+		// Draw background        
+		if (self.background) {	      
+			self.background.draw(system.canvas);				
+		}
+	  
+		// Draw
+		drawObjects(system.context, self.players);
+		drawObjects(system.context, self.pickupArray);
 	}
-  
-    // Draw
-	drawObjects(system.context, self.players);
-    drawObjects(system.context, self.pickupArray);
-
-    // Draw UI
-    drawHUD(system.context, self.players);
+	else
+	{
+		// Draw UI
+		drawHUD(system.context, self.startTimer);
+	}
   
     if (self.showStats) {
       document.getElementById("actualTime").innerHTML = "Seconds elapsed = " + system.gameClock.actualTimeElapsed().toFixed(2) + " s";
@@ -141,7 +148,7 @@ function GameStage() {
         if (pairs[i].bodyA.hostObject !== undefined &&
             pairs[i].bodyB.hostObject !== undefined) {
         
-          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
         
       }
@@ -158,7 +165,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.preUpdate !== undefined) {
           
-          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });
@@ -174,7 +181,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.postUpdate !== undefined) {
         
-          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });                    
@@ -210,6 +217,12 @@ function GameStage() {
     
     // Update system clock
     system.gameClock.tick();
+	
+	if (!self.started)
+	{
+		self.startTimer -= system.gameClock.deltaTime / 1000;
+		if (self.startTimer <= 0) self.started = true;
+	}
     
     // Update main physics engine state
     Matter.Engine.update(system.engine, system.gameClock.deltaTime);
