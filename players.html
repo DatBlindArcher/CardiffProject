@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add players</title>
+    <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="engine/script.js"></script>
+    <style>
+        html, body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+
+            font-family: "Righteous", Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 5em;
+        }
+
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        #players {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #addPlayer {
+            margin: 18px auto;
+            text-align: center;
+            color: white;
+            background-color: #222;
+            font-size: 3.375em;
+            cursor: pointer;
+            padding: 8px 12px 8px 12px;
+            border: 1px solid #56FF38;
+            border-radius: 5px;
+            max-width: 200px;
+        }
+
+        .player {
+            width: 300px;
+            margin: 15px;
+        }
+
+        .keys {
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .keyLeft {
+            width: 50px;
+            height: 50px;
+            background-color: #FFF;
+            border-top: 5px solid #EEE;
+            border-right: 5px solid #EEE;
+            border-radius: 2px;
+            display: inline-block;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+
+
+        .keyRight {
+            width: 50px;
+            height: 50px;
+            background-color: #FFF;
+            border-top: 5px solid #EEE;
+            border-right: 5px solid #EEE;
+            border-radius: 2px;
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Set players</h1>
+    <div id="addPlayer">Add</div>
+    <div id="players"></div>
+</body>
+</html>

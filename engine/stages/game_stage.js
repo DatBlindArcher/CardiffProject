@@ -202,11 +202,15 @@ function GameStage() {
     system.engine.world.gravity.y = 0;
     
     // Add bounds so you cannot go off the screen
-    var b0 = Matter.Bodies.rectangle(-50, 300, 100, canvas.height, { isStatic: true });
+	/*  
+	var b0 = Matter.Bodies.rectangle(-50, 300, 100, canvas.height, { isStatic: true });
     var b1 = Matter.Bodies.rectangle(850, 300, 100, canvas.height, { isStatic: true });
     var b2 = Matter.Bodies.rectangle(400, -50, canvas.width, 100, { isStatic: true });
     var b3 = Matter.Bodies.rectangle(400, 650, canvas.width, 100, { isStatic: true });
-    
+    */
+	  
+	  
+	/*
     b0.collisionFilter.group = 0;
     b0.collisionFilter.category = CollisionModel.StaticScene.Category;
     b0.collisionFilter.mask = CollisionModel.StaticScene.Mask;
@@ -224,12 +228,15 @@ function GameStage() {
     b3.collisionFilter.mask = CollisionModel.StaticScene.Mask;
     
     Matter.World.add(system.engine.world, [b0, b1, b2, b3]);
-
-
+	*/
+	  
+	
+	  
+	  
 
     // Register on-collision event
     Matter.Events.on(system.engine, 'collisionStart', function(event) {
-    
+      
       let pairs = event.pairs;
       
       for (var i=0; i<pairs.length; ++i) {
