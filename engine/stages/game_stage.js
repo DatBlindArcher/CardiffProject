@@ -91,6 +91,25 @@ function GameStage() {
                           collisionGroup : -1,
 						  leftKey : 'A',
 						  rightKey : 'D',
+						  color : "#004DFF",
+                          preUpdate : function(player, deltaTime, env) {
+                          
+                            updatePlayer(player, deltaTime, env);
+                          },
+                          postUpdate : function() {}
+                          }));
+						  
+    self.players.push(new Player( { pid : "Player 2",
+                          x : 400,
+                          y : 200,
+                          spriteURI : 'Assets/Images/Avatars/avatar3.png',
+                          world : system.engine.world,
+                          mass : 20,
+                          boundingVolumeScale : 0.75,
+                          collisionGroup : -1,
+						  leftKey : 'J',
+						  rightKey : 'L',
+						  color : "#FF00AC",
                           preUpdate : function(player, deltaTime, env) {
                           
                             updatePlayer(player, deltaTime, env);

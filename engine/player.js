@@ -25,6 +25,7 @@ function Player(config) {
   this.size = null;
   this.pid = config.pid;
   this.rechargeRate = 1;
+  this.color = config.color;
   
   
   this.sprite = new Sprite(
@@ -75,7 +76,7 @@ function Player(config) {
 	  
 	  if (!this.trail)
 	  {  
-		this.trail = new Trail({ position : { x: pos.x, y: pos.y }, owner : this, color : 'red' });
+		this.trail = new Trail({ position : { x: pos.x, y: pos.y }, owner : this, color : self.color });
 	  }
 	  
 	  this.trail.draw(context);
