@@ -104,42 +104,6 @@ function GameStage() {
                           postUpdate : function() {}
                           }));
 	}
-	
-    /*self.players.push(new Player( { pid : "Player 1",
-                          x : 200,
-                          y : 400,
-                          spriteURI : 'Assets/Images/Avatars/avatar2.png',
-                          world : system.engine.world,
-                          mass : 20,
-                          boundingVolumeScale : 0.75,
-                          collisionGroup : -1,
-						  leftKey : 'A',
-						  rightKey : 'D',
-						  color : "#004DFF",
-                          preUpdate : function(player, deltaTime, env) {
-                          
-                            updatePlayer(player, deltaTime, env);
-                          },
-                          postUpdate : function() {}
-                          }));
-						  
-    self.players.push(new Player( { pid : "Player 2",
-                          x : 400,
-                          y : 200,
-                          spriteURI : 'Assets/Images/Avatars/avatar3.png',
-                          world : system.engine.world,
-                          mass : 20,
-                          boundingVolumeScale : 0.75,
-                          collisionGroup : -1,
-						  leftKey : 'J',
-						  rightKey : 'L',
-						  color : "#FF00AC",
-                          preUpdate : function(player, deltaTime, env) {
-                          
-                            updatePlayer(player, deltaTime, env);
-                          },
-                          postUpdate : function() {}
-                          }));*/
 						
     // Powerups
     self.powerupTypes['fast'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/fast.png',
@@ -179,39 +143,6 @@ function GameStage() {
     // Setup gravity configuration for this stage
     system.engine.world.gravity.y = 0;
     
-    // Add bounds so you cannot go off the screen
-	/*  
-	var b0 = Matter.Bodies.rectangle(-50, 300, 100, canvas.height, { isStatic: true });
-    var b1 = Matter.Bodies.rectangle(850, 300, 100, canvas.height, { isStatic: true });
-    var b2 = Matter.Bodies.rectangle(400, -50, canvas.width, 100, { isStatic: true });
-    var b3 = Matter.Bodies.rectangle(400, 650, canvas.width, 100, { isStatic: true });
-    */
-	  
-	  
-	/*
-    b0.collisionFilter.group = 0;
-    b0.collisionFilter.category = CollisionModel.StaticScene.Category;
-    b0.collisionFilter.mask = CollisionModel.StaticScene.Mask;
-    
-    b1.collisionFilter.group = 0;
-    b1.collisionFilter.category = CollisionModel.StaticScene.Category;
-    b1.collisionFilter.mask = CollisionModel.StaticScene.Mask;
-    
-    b2.collisionFilter.group = 0;
-    b2.collisionFilter.category = CollisionModel.StaticScene.Category;
-    b2.collisionFilter.mask = CollisionModel.StaticScene.Mask;
-    
-    b3.collisionFilter.group = 0;
-    b3.collisionFilter.category = CollisionModel.StaticScene.Category;
-    b3.collisionFilter.mask = CollisionModel.StaticScene.Mask;
-    
-    Matter.World.add(system.engine.world, [b0, b1, b2, b3]);
-	*/
-	  
-	
-	  
-	  
-
     // Register on-collision event
     Matter.Events.on(system.engine, 'collisionStart', function(event) {
       
@@ -319,13 +250,26 @@ function GameStage() {
     // TODO
     
     // Repeat gameloop, or start phase-out if end of game condition(s) met
-    if (self.gameWinner==null) {
+	var alive = 0;
+	
+    for (var i = 0; i < self.players.length; i++)
+	{
+		if (!self.players[i].dead)
+			alive++;
+	}
+
+    if (alive > 1) {
     
       window.requestAnimationFrame(self.mainLoop);
     }
     else {
     
       // Conditions arise to exit stage - leave mainLoop and enter initPhaseOut
+		for (var i = 0; i < self.players.length; i++)
+		{
+			if (!self.players[i].dead)
+				window.alert(self.players[i].pid + " won.");
+		}
       window.requestAnimationFrame(self.initPhaseOut);
     }
   }
@@ -333,7 +277,7 @@ function GameStage() {
   this.initPhaseOut = function() {
   
     console.log("init phaseOut");
-    console.log(self.gameWinner.pid + " Wins!!!");
+    //console.log(self.gameWinner.pid + " Wins!!!");
     
     window.requestAnimationFrame(self.phaseOutLoop);
   }
