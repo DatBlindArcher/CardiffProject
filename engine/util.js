@@ -2,13 +2,13 @@
 
 
 // Function to iterate through an array and draw contained objects
-function drawObjects(context, collection) {
+function drawObjects(context, gamestate, collection) {
 
   for (i=0;i<collection.length; ++i) {
 
     if (collection[i]) {
     
-      collection[i].draw(context);            
+      collection[i].draw(context, gamestate);            
     }
   }
 }

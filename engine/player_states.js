@@ -1,7 +1,7 @@
 
 // Player control functions / states
 function updatePlayer(player, deltaTime, env) {
-	if (!env.started || player.dead) return;
+	if (!env.gamestate.started || player.dead) return;
 	
 	var F = player.forwardDirection();
 	
@@ -12,17 +12,17 @@ function updatePlayer(player, deltaTime, env) {
 		{
 			var trail = env.players[i].trail;
 			
-			if (isPlayerOnTrail(player, trail, deltaTime))
+			if (isPlayerOnTrail(player, trail, deltaTime, env))
 			{
 				console.log("We touched something: ", trail.color);
 				player.collideWithTrail(trail, env);
 			}
 		}
 		
-		player.trail.positions.push({ x: player.mBody.position.x, y: player.mBody.position.y });
+		player.trail.positions.push({ x: player.mBody.position.x, y: player.mBody.position.y, size: trail_width * env.gamestate.size });
 	}
 		
-	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
+	player.translate({ x : F.x * player_move_speed * env.gamestate.speed * deltaTime, y : F.y * player_move_speed * env.gamestate.speed * deltaTime });
 	
   if (system.keyPressed(player.leftKey)) 
   { 
@@ -35,9 +35,9 @@ function updatePlayer(player, deltaTime, env) {
   }
 }
 
-function isPlayerOnTrail(player, trail, deltaTime) {
+function isPlayerOnTrail(player, trail, deltaTime, env) {
 	var center = player.mBody.position;
-	var radius = (player.size.width / 1.5);
+	var radius = (player.size.width * env.gamestate.size / 1.5);
 	radius *= radius;
 	var points = trail.positions;
 	if (points.length == 0) return false;
@@ -45,15 +45,14 @@ function isPlayerOnTrail(player, trail, deltaTime) {
 	for (var i = 0; i < points.length; i++)
 	{
 		if (player.trail == trail)
-			if (points.length - i < trail_tail) 
+			if (points.length - i < env.gamestate.size / 2 * trail_tail / env.gamestate.speed) 
 				break;
 		
 		var dx = center.x - points[i].x;
 		var dy = center.y - points[i].y;
 		
-		if (dx * dx + dy * dy <= radius)
+		if (dx * dx + dy * dy - points[i].size * trail_width <= radius)
 		{
-			console.log(center, points[i]);
 			return true;  
 		}
 	}

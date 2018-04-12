@@ -4,18 +4,16 @@ function Trail(config) {
 	var self = this;
 	this.owner = config.owner;
 	this.color = config.color;
-	this.positions = [config.position];
+	this.positions = [{ x: config.position.x, y: config.position.y, size: trail_width }];
   
 	this.draw = function(context) {
-		context.strokeStyle = this.color;
-		context.lineWidth = trail_width;
-		context.beginPath();
-		context.moveTo(this.positions[0].x, this.positions[0].y);
+		context.fillStyle = this.color;
 		
 		for (var i = 0; i < this.positions.length; i++)
-			context.lineTo(this.positions[i].x, this.positions[i].y);
-	
-	
-		context.stroke();
+		{
+			context.beginPath();
+			context.arc(this.positions[i].x, this.positions[i].y, this.positions[i].size, 0, 2 * Math.PI);
+			context.fill();
+		}
 	}
 }

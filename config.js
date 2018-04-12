@@ -10,7 +10,7 @@ const fps = 60; // depricated
 
 const points_on_hit = 100;
 
-const player_sprite_scale = 1; // Bigger number = larger sprite!
+const player_sprite_scale = 0.5; // Bigger number = larger sprite!
 
 const pickup_sprite_scale = 1.75; // Bigger number = larger sprite!
 
@@ -26,6 +26,6 @@ const integrator_step = 1.0; // depricated
 
 const frictionCoeff = 0.025; // depricated
 
-const trail_width = 4; // Width of the default trail
+const trail_width = 2; // Width of the default trail
 
 const trail_tail = 10; // The amount of frames the tail of the trail is ignored for the owner of the trail

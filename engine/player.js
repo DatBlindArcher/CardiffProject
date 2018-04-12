@@ -64,7 +64,7 @@ function Player(config) {
   // Rendering interface
   //
   
-  this.draw = function(context) {
+  this.draw = function(context, gamestate) {
   
     if (this.mBody) {
       
@@ -84,8 +84,8 @@ function Player(config) {
 	  {
 		  context.translate(pos.x, pos.y);
 		  context.rotate(theta);
-		  context.translate(-this.sprite.image.width * this.scale / 2, -this.sprite.image.height * this.scale / 2);
-		  this.sprite.draw(context, 0, 0, this.scale);
+		  context.translate(-this.sprite.image.width * this.scale / 2 * gamestate.size, -this.sprite.image.height * this.scale * gamestate.size / 2);
+		  this.sprite.draw(context, 0, 0, this.scale * gamestate.size);
 	  }
       
       context.restore();

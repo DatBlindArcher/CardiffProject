@@ -23,13 +23,13 @@ function GameStage() {
   
   // Main game-state specific variables
   this.background = null;
+  this.gamestate = { started : false, speed : 1, size : 1 };
   
-  this.started = false;
   this.startTimer = 5;
   this.players = [];
   
-  this.pickupTypes = []; // Pickup TYPES
-  this.pickupArray = []; // Pickup INSTANCES
+  this.powerupTypes = []; // Pickup TYPES
+  this.powerupArray = []; // Pickup INSTANCES
   this.pickup_timer = 0; // Number of seconds between pickups appearing        
 	
   this.showStats = true;
@@ -41,7 +41,7 @@ function GameStage() {
   // "Internal" state functions
   this.drawScene = function() {
 	
-	if (self.started)
+	if (self.gamestate.started)
 	{
 		// Draw background        
 		if (self.background) {	      
@@ -49,8 +49,8 @@ function GameStage() {
 		}
 	  
 		// Draw
-		drawObjects(system.context, self.players);
-		drawObjects(system.context, self.pickupArray);
+		drawObjects(system.context, self.gamestate, self.players);
+		drawObjects(system.context, self.gamestate, self.powerupArray);
 	}
 	else
 	{
@@ -98,14 +98,38 @@ function GameStage() {
                           postUpdate : function() {}
                           }));
 						
-    // Pickups
-    self.pickupTypes['points_pickup'] = new PickupType(  { spriteURI : 'Assets/Images/pickup_points.png',
+    // Powerups
+    self.powerupTypes['fast'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/fast.png',
+                                                      collisionGroup : 0,
+                                                      handler : function(collector) {
+														  
+                                                       self.gamestate.speed *= 2;
+                                                      }
+                                                    } );	
+													
+    self.powerupTypes['slow'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/slow.png',
                                                       collisionGroup : 0,
                                                       handler : function(collector) {
                                                      
-                                                       collector.addPoints(50);
+                                                       self.gamestate.speed /= 2;
                                                       }
-                                                    } );											
+                                                    } );
+													
+    self.powerupTypes['thick'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/thick.png',
+                                                      collisionGroup : 0,
+                                                      handler : function(collector) {
+                                                     
+                                                       self.gamestate.size *= 2;
+                                                      }
+                                                    } );*/
+													
+    self.powerupTypes['thin'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/thin.png',
+                                                      collisionGroup : 0,
+                                                      handler : function(collector) {
+                                                     
+                                                       self.gamestate.size /= 2;
+                                                      }
+                                                    } );							
     
     self.pickup_timer = pickup_time_delay;
     
@@ -148,7 +172,7 @@ function GameStage() {
         if (pairs[i].bodyA.hostObject !== undefined &&
             pairs[i].bodyB.hostObject !== undefined) {
         
-          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { gamestate : self.gamestate, started : self.gamestate.started, players : self.players, powerupTypes : self.powerupTypes, powerupArray : self.powerupArray } );
         }
         
       }
@@ -165,7 +189,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.preUpdate !== undefined) {
           
-          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { gamestate : self.gamestate, started : self.gamestate.started, players : self.players, powerupTypes : self.powerupTypes, powerupArray : self.powerupArray } );
         }
       };
     });
@@ -181,7 +205,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.postUpdate !== undefined) {
         
-          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { started : self.started, players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { gamestate : self.gamestate, started : self.gamestate.started, players : self.players, powerupTypes : self.powerupTypes, powerupArray : self.powerupArray } );
         }
       };
     });                    
@@ -218,24 +242,24 @@ function GameStage() {
     // Update system clock
     system.gameClock.tick();
 	
-	if (!self.started)
+	if (!self.gamestate.started)
 	{
 		self.startTimer -= system.gameClock.deltaTime / 1000;
-		if (self.startTimer <= 0) self.started = true;
+		if (self.startTimer <= 0) self.gamestate.started = true;
 	}
     
     // Update main physics engine state
     Matter.Engine.update(system.engine, system.gameClock.deltaTime);
     
     // Manage pickups
-    let pickupStatus = processPickups(self.pickupTypes, system.engine, self.pickup_timer, system.gameClock.convertTimeIntervalToSeconds(system.gameClock.deltaTime));
+    let pickupStatus = processPickups(self.powerupTypes, system.engine, self.pickup_timer, system.gameClock.convertTimeIntervalToSeconds(system.gameClock.deltaTime));
     
     self.pickup_timer = pickupStatus.timer;
     
     if (pickupStatus.newPickup) {
     
       Matter.World.add(system.engine.world, [pickupStatus.newPickup.mBody]); 
-      self.pickupArray.push(pickupStatus.newPickup);
+      self.powerupArray.push(pickupStatus.newPickup);
     }
     
     // Render latest frame

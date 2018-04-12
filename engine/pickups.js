@@ -98,7 +98,7 @@ function Pickup(config) {
     
     // Remove from collections
     Matter.World.remove(system.engine.world, self.mBody);
-    env.pickupArray.splice(env.pickupArray.indexOf(self), 1);
+    env.powerupArray.splice(env.powerupArray.indexOf(self), 1);
   }
   
   this.collideWithProjectile = function(otherPickup, env) {
