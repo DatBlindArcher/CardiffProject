@@ -28,4 +28,4 @@ const frictionCoeff = 0.025; // depricated
 
 const trail_width = 4; // Width of the default trail
 
-const trail_tail = 5; // The amount of frames the tail of the trail is ignored for the owner of the trail
+const trail_tail = 10; // The amount of frames the tail of the trail is ignored for the owner of the trail
