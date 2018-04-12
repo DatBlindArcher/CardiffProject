@@ -59,6 +59,12 @@ html, body {
 #stage1 #addPlayer, #stage1 #removePlayer {
     width: 50%;
     height: 100%;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
 #stage1 #addPlayer:active , #stage1 #removePlayer:active {
@@ -82,7 +88,7 @@ html, body {
     color: black;
 }
 
-#stage1 .keyLeft {
+#stage1 .keyLeft, #stage1 .keyRight {
     width: 50px;
     height: 50px;
     background-color: #FFF;
@@ -91,21 +97,13 @@ html, body {
     border-radius: 2px;
     display: inline-block;
     margin-right: 8px;
-    cursor: pointer;
+    font-family: "Righteous";
+    font-size: 2rem;
+    text-align: center;
+    text-transform: uppercase;
 }
-
-
-
 #stage1 .keyRight {
-    width: 50px;
-    height: 50px;
-    background-color: #FFF;
-    border-top: 5px solid #EEE;
-    border-right: 5px solid #EEE;
-    border-radius: 2px;
-    display: inline-block;
     margin-left: 8px;
-    cursor: pointer;
 }
 
 #stage1 #startGame {

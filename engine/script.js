@@ -6,21 +6,21 @@ $(document).ready(function() {
 
     // onclick events
     $("#startGame").on('click', startGame);
+    $("#backToStart").on('click', backToStart);
     $("#addPlayer").on('click', addPlayer);
     $("#removePlayer").on('click', removePlayer);
-    $("#players").on("click", ".keyLeft", checkInput);
-    $("#players").on("click", ".keyRight", checkInput);
 
 
 });
 
 var counter = 0;
 var colors = ["004DFF", "FF00AC", "56FF38", "FF1700", "FFFF00", "FFF"];
+var controls = [["Q", "W"], ["D", "F"], ["T", "Y"], ["J", "K"], ["O", "P"], ["X", "C"], ]
 var playerArray = []; //
 
 var addPlayer = function () {
     if ( counter < 6) {
-        $("#players").append("<div class='player' style='border: 2px solid #" + colors[counter] + "'><h2>Player " + (counter + 1) + "</h2><div class='keys'><div class='keyLeft'>A</div><div class='keyRight'>D</div></div></div>");
+        $("#players").append("<div class='player' style='border: 2px solid #" + colors[counter] + "'><h2>Player " + (counter + 1) + "</h2><div class='keys'><input type='text' maxlength='1' value='" + controls[counter][0] + "' class='keyLeft'><input type='text' maxlength='1' class='keyRight' value='" + controls[counter][1] + "'></div></div>");
         counter++;
     }
 };
@@ -32,19 +32,21 @@ var removePlayer = function () {
     }
 };
 
-var checkInput = function(e) {
-    //e.currentTarget.style = "background-color: #EEE";
-    targetKey = e.currentTarget;
-    $("body").keydown((f) => {
-         $(this).html(keyCodes[f.keycode]);
-         console.log(targetKey);
-         targetKey = null;
-    })
-};
-
 var startGame = function() {
     $("#stage1").css("display", "none"); //toggle off
     $("#stage2").css("display", "block"); //toggle on
+
+    $(".player").each(function (){
+        playerArray.push({
+            left: $(this).find(".keyLeft").val(),
+            right: $(this).find(".keyRight").val()
+        });
+    });
+};
+
+var backToStart = function() {
+    $("#stage1").css("display", "block"); //toggle on
+    $("#stage2").css("display", "none"); //toggle off
 };
 
 var keyCodes = {
