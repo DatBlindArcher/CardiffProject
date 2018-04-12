@@ -45,7 +45,7 @@ function isPlayerOnTrail(player, trail, deltaTime) {
 	for (var i = 0; i < points.length; i++)
 	{
 		if (player.trail == trail)
-			if (points.length - i < radius * 1.2 / (15000 * player_move_speed * (1 / 60))) 
+			if (points.length - i < trail_tail) 
 				break;
 		
 		var dx = center.x - points[i].x;
