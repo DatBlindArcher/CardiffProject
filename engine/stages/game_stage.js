@@ -121,7 +121,7 @@ function GameStage() {
                                                      
                                                        self.gamestate.size *= 2;
                                                       }
-                                                    } );*/
+                                                    } );
 													
     self.powerupTypes['thin'] = new PickupType(  { spriteURI : 'Assets/Images/Powerups/thin.png',
                                                       collisionGroup : 0,
