@@ -77,11 +77,13 @@ function GameStage() {
     self.players.push(new Player( { pid : "Player 1",
                           x : 200,
                           y : 400,
-                          spriteURI : 'Assets/Images/player1_ship.png',
+                          spriteURI : 'Assets/Images/Avatars/avatar2.png',
                           world : system.engine.world,
                           mass : 20,
                           boundingVolumeScale : 0.75,
                           collisionGroup : -1,
+						  leftKey : 'A',
+						  rightKey : 'D',
                           preUpdate : function(player, deltaTime, env) {
                           
                             updatePlayer(player, deltaTime, env);
@@ -139,7 +141,7 @@ function GameStage() {
         if (pairs[i].bodyA.hostObject !== undefined &&
             pairs[i].bodyB.hostObject !== undefined) {
         
-          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          pairs[i].bodyA.hostObject.doCollision(pairs[i].bodyB.hostObject, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
         
       }
@@ -156,7 +158,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.preUpdate !== undefined) {
           
-          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.preUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });
@@ -172,7 +174,7 @@ function GameStage() {
         if (world.bodies[i].hostObject !== undefined &&
             world.bodies[i].hostObject.postUpdate !== undefined) {
         
-          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
+          world.bodies[i].hostObject.postUpdate(world.bodies[i].hostObject, system.gameClock.deltaTime, { players : self.players, pickupTypes : self.pickupTypes, pickupArray : self.pickupArray } );
         }
       };
     });                    

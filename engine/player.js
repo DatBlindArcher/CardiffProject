@@ -15,10 +15,10 @@ function Player(config) {
   
   var self = this;
   
-	this.timer = 0;
-	this.leftkey = 'A';
-	this.rightkey = 'D';
-	
+	this.leftKey = config.leftKey;
+	this.rightKey = config.rightKey;
+
+	this.dead = false;
   this.score = 0;
   this.scale = player_sprite_scale;
   this.mBody = null;
@@ -72,13 +72,6 @@ function Player(config) {
       
       var pos = this.mBody.position;
       var theta = this.mBody.angle;
-      
-      context.translate(pos.x, pos.y);
-      context.rotate(theta);
-      context.translate(-this.sprite.image.width * this.scale / 2, -this.sprite.image.height * this.scale / 2);
-      this.sprite.draw(context, 0, 0, this.scale);
-      
-      context.restore();
 	  
 	  if (!this.trail)
 	  {  
@@ -86,9 +79,17 @@ function Player(config) {
 	  }
 	  
 	  this.trail.draw(context);
+      
+	  if (!this.dead)
+	  {
+		  context.translate(pos.x, pos.y);
+		  context.rotate(theta);
+		  context.translate(-this.sprite.image.width * this.scale / 2, -this.sprite.image.height * this.scale / 2);
+		  this.sprite.draw(context, 0, 0, this.scale);
+	  }
+      
+      context.restore();
     }
-    
-	this.drawBoundingVolume(context);
   }
   
   // Draw player bounding volume (Geometry of Matter.Body mBody)
@@ -224,9 +225,8 @@ function Player(config) {
     console.log('Oi, knock it off!');
   }
   
-  this.collideWithTrail = function(color, env) {
-    
-    console.log('Touched a trail ' + color);
+  this.collideWithTrail = function(trail, env) {
+	  this.dead = true;
   }
   
   this.collideWithPickup = function(pickup, env) {

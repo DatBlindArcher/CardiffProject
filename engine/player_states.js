@@ -1,64 +1,62 @@
 
 // Player control functions / states
-// TODO: Put these in player
-
 function updatePlayer(player, deltaTime, env) {
-  
+	if (player.dead) return;
+	
 	var F = player.forwardDirection();
 	
-	// Get pixels (somewhere more distant)
-	var pixels = system.context.getImageData(
-	player.mBody.position.x - (player.size.width / 4), player.mBody.position.y - (player.size.height / 4), 
-	player.size.width / 2, player.size.height / 2).data;
-	
-	// Get trail colors here
-	var red = { r: 255, g: 0, b: 0 };
-	
-	// Pixel is per 4 rgba
-	for (var i = 0; i < pixels.length; i += 4)
+	if (player.trail)
 	{
-		// We could do a manhatten circle check here
-		
-		if (pixels[i] == red.r && 
-		pixels[i + 1] == red.g &&
-		pixels[i + 2] == red.b)
+		// Trail collisions
+		for (var i = 0; i < env.players.length; i++)
 		{
-			console.log("We touched something: ", pixels[i], pixels[i + 1], pixels[i + 2]);
+			var trail = env.players[i].trail;
+			
+			if (isPlayerOnTrail(player, trail, deltaTime))
+			{
+				console.log("We touched something: ", trail.color);
+				player.collideWithTrail(trail, env);
+			}
 		}
-	}
-	
-	// Compare if pixel (x, y) is not background.
-	// TODO
-	if (false) player.collideWithTrail("red", env);
-	
-	if (player.timer == 0)
-	{
-		// TODO
-		// timer -= deltaTime;
-		if (player.trail) {    
-	  
-		  // Add a position to trail
-		  player.trail.positions.push({x: player.mBody.position.x - F.x * 40, y: player.mBody.position.y - F.y * 40});
-		}
-	}
-	
-	else
-	{
-		// leave gap
-		// timer = Random.Range();
+		
+		player.trail.positions.push({ x: player.mBody.position.x, y: player.mBody.position.y });
 	}
 		
 	player.translate({ x : F.x * player_move_speed * deltaTime, y : F.y * player_move_speed * deltaTime });
 	
-  if (system.keyPressed(player.leftkey)) 
+  if (system.keyPressed(player.leftKey)) 
   { 
-    Matter.Body.setAngularVelocity(player.mBody, 0);
     player.rotate(-Math.PI * player_rotate_speed * deltaTime);
   }
   
-  if (system.keyPressed(player.rightkey)) 
+  if (system.keyPressed(player.rightKey)) 
   {  
-    Matter.Body.setAngularVelocity(player.mBody, 0);
     player.rotate(Math.PI * player_rotate_speed * deltaTime);
   }
+}
+
+function isPlayerOnTrail(player, trail, deltaTime) {
+	var center = player.mBody.position;
+	var radius = (player.size.width / 1.5);
+	radius *= radius;
+	var points = trail.positions;
+	if (points.length == 0) return false;
+	
+	for (var i = 0; i < points.length; i++)
+	{
+		if (player.trail == trail)
+			if (points.length - i < radius * 1.2 / (15000 * player_move_speed * (1 / 60))) 
+				break;
+		
+		var dx = center.x - points[i].x;
+		var dy = center.y - points[i].y;
+		
+		if (dx * dx + dy * dy <= radius)
+		{
+			console.log(center, points[i]);
+			return true;  
+		}
+	}
+	
+	return false;
 }
