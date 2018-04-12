@@ -2,20 +2,130 @@
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
 @import url('https://fonts.googleapis.com/css?family=Faster+One');
 
-h1 {
 
-  display : block;
-  margin-left : auto;
-  margin-right : auto;
-  text-align : center;
+/*****************************
+*         Startscreen
+*****************************/
+html, body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    color: white;
+    font-family: "Righteous", Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+}
+
+#stage1 img {
+    display: block;
+    margin: auto;
+
+    max-height: 500px;
+    max-width: 100%;
+}
+
+#stage1 h1 {
+    color: white;
+    text-align: center;
+    font-size: 2.775em;
+}
+
+#stage1 #players h2 {
+    color: white;
+    text-align: center;
+}
+
+#stage1 #players {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#stage1 #playerControl {
+    display: flex;
+    justify-content: center;
+    margin: 18px auto;
+    color: white;
+    background-color: #222;
+    font-size: 3.375em;
+    cursor: pointer;
+    border: 1px solid #56FF38;
+    border-radius: 5px;
+    max-width: 200px;
+    text-align: center;
+}
+
+#stage1 #addPlayer, #stage1 #removePlayer {
+    width: 50%;
+    height: 100%;
+}
+
+#stage1 #addPlayer:active , #stage1 #removePlayer:active {
+    background-color: #56FF38;
+}
+
+#stage1 #addPlayer {
+    border-right: 1px solid #56FF38;
+}
+
+#stage1 .player {
+    width: 300px;
+    margin: 15px;
+}
+
+#stage1 .keys {
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: black;
+}
+
+#stage1 .keyLeft {
+    width: 50px;
+    height: 50px;
+    background-color: #FFF;
+    border-top: 5px solid #EEE;
+    border-right: 5px solid #EEE;
+    border-radius: 2px;
+    display: inline-block;
+    margin-right: 8px;
+    cursor: pointer;
 }
 
 
-#canvas {
+
+#stage1 .keyRight {
+    width: 50px;
+    height: 50px;
+    background-color: #FFF;
+    border-top: 5px solid #EEE;
+    border-right: 5px solid #EEE;
+    border-radius: 2px;
+    display: inline-block;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+#stage1 #startGame {
+    cursor: pointer;
+}
+
+/*****************************
+*         Gamescreen
+*****************************/
+
+#stage2 {
+    display: none;
+}
+
+#stage2 #canvas {
 
   display : block;
   margin-top : 1em;
   margin-left : auto;
   margin-right : auto;
   background-color : #000;
+  border: 5px solid grey;
 }

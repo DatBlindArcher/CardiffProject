@@ -1,6 +1,13 @@
 $(document).ready(function() {
-    init();
+    // init
+
+    addPlayer(); // player1
+    addPlayer(); // player2
+
+    // onclick events
+    $("#startGame").on('click', startGame);
     $("#addPlayer").on('click', addPlayer);
+    $("#removePlayer").on('click', removePlayer);
     $("#players").on("click", ".keyLeft", checkInput);
     $("#players").on("click", ".keyRight", checkInput);
 
@@ -9,34 +16,36 @@ $(document).ready(function() {
 
 var counter = 0;
 var colors = ["004DFF", "FF00AC", "56FF38", "FF1700", "FFFF00", "FFF"];
-
-var init = function () {
-    addPlayer();
-};
+var playerArray = []; //
 
 var addPlayer = function () {
     if ( counter < 6) {
         $("#players").append("<div class='player' style='border: 2px solid #" + colors[counter] + "'><h2>Player " + (counter + 1) + "</h2><div class='keys'><div class='keyLeft'>A</div><div class='keyRight'>D</div></div></div>");
         counter++;
-        if (counter >= 6) {
-            $("#addPlayer").toggle();
-        }
     }
-
-
 };
 
+var removePlayer = function () {
+    if ( counter > 1 ) {
+        $("#players .player:last").remove();
+        counter--;
+    }
+};
 
-
-function checkInput(e){
+var checkInput = function(e) {
     //e.currentTarget.style = "background-color: #EEE";
     targetKey = e.currentTarget;
-    $(document).onkeydown((f) => {
-         console.log(keyCodes[f.keyCode]);
-         $(targetKey).html(keyCodes[f.keycode]);
+    $("body").keydown((f) => {
+         $(this).html(keyCodes[f.keycode]);
+         console.log(targetKey);
          targetKey = null;
     })
-}
+};
+
+var startGame = function() {
+    $("#stage1").css("display", "none"); //toggle off
+    $("#stage2").css("display", "block"); //toggle on
+};
 
 var keyCodes = {
   0 : "That key has no keycode",

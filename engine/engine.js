@@ -30,3 +30,4 @@ include('engine/CollisionModel.js');
 
 // self added
 include('engine/trail.js');
+include('engine/script.js');

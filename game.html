@@ -4,45 +4,59 @@
 
 <html>
 
-  <head>
-  
-    <title>Explorer01</title>
-    <meta charset="UTF-8">
-    
-    <link rel="stylesheet" type="text/css" href="engine/layout.css">    
-    <script src='engine/engine.js'></script>
-    
-    <script>
-    
-      function init() {
-        
-        var canvas = document.getElementById('canvas');
-        system = new System(canvas, canvas.getContext('2d'));
-        
-        // Build stage graph
-        var gameStage = new GameStage();
-        
-        system.stageGraph = gameStage;
-        
-        // Start
-        system.stageGraph.init();
-      }
-      
-    </script>
-    
-  </head>
-  
-  <body onload="init()">
-    
-    <h1>Explorer01</h1>
-    
-    <canvas id="canvas" width="800" height="600" <!--onclick="enterFullscreen(this)"--> >:(</canvas>
-    
-    <label id="actualTime"></label><br>
-    <label id="timeDelta"></label><br>
-    <label id="fps"></label><br>
-    <label id="spf"></label><br>
-    
-  </body>
+    <head>
+
+      <title>Explorer01</title>
+      <meta charset="UTF-8">
+
+      <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="engine/layout.css">
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src='engine/engine.js'></script>
+
+
+      <script>
+
+          function init() {
+
+              var canvas = document.getElementById('canvas');
+              system = new System(canvas, canvas.getContext('2d'));
+
+              // Build stage graph
+              var gameStage = new GameStage();
+
+              system.stageGraph = gameStage;
+
+              // Start
+              system.stageGraph.init();
+          }
+
+      </script>
+
+    </head>
+
+    <body onload="init()">
+
+        <div id="stage1">
+            <img src="Assets/Images/startBackground.png">
+            <h1>Set players</h1>
+            <div id="playerControl"><a id="addPlayer">+</a><a id="removePlayer">-</a></div>
+            <div id="players"></div>
+            <h1 id="startGame"> CLICK TO START THE GAME</h1>
+        </div>
+
+        <div id="stage2">
+          <h1>Explorer01</h1>
+
+          <canvas id="canvas" width="800" height="600" <!--onclick="enterFullscreen(this)"--> >:(</canvas>
+
+          <label id="actualTime"></label><br>
+          <label id="timeDelta"></label><br>
+          <label id="fps"></label><br>
+          <label id="spf"></label><br>
+        </div>
+
+    </body>
   
 </html>
